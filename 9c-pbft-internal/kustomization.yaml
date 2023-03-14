@@ -14,6 +14,9 @@ images:
 - name: kustomization-ninechronicles-snapshot
   newName: planetariumhq/ninechronicles-snapshot
   newTag: git-88212493c8d4d7a5cbb7e597a2876cea34b56ac2-dynamic
+- name: kustomization-pbftstats
+  newName: planetariumhq/pbftstats
+  newTag: "230224"
 resources:
  - explorer.yaml
  - validator-1.yaml
@@ -32,3 +35,4 @@ resources:
  - snapshot.yaml
 # - seed.yaml
  - seed-pow.yaml
+ - pbftstats.yaml

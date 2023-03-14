@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: pbftstats
+  name: pbftstats
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pbftstats
+  serviceName: pbftstats
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: pbftstats
+    spec:
+      containers:
+        - name: pbftstats
+          image: kustomization-pbftstats
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: COLLECT_PATH
+            value: /data/stat_logs
+          - name: REPORT_PATH
+            value: /data/reports
+          - name: HOST_URL
+            value: http://a9261bb03cf0a4b8e910c423c2296adf-113367791.us-east-2.elb.amazonaws.com
+          - name: VALIDATOR_MAP_URL
+            value: https://9c-dev-cluster-configs.s3.ap-northeast-2.amazonaws.com/pbft-validators.json
+          - name: QUERY_VALIDATOR_KEY
+            value: 03461fb858bd9852ab699477a7ae7b11aefff0797ab5b0342d57b1d38f3560a23e
+          - name: COLLECT_START_BLOCK_INDEX
+            value: "5963940"
+          - name: CHUNK_SIZE_COLLECT
+            value: "512"
+          - name: CHUNK_SIZE_RECENT
+            value: "30"
+          - name: INTERVAL_COLLECT
+            value: "1"
+          - name: INTERVAL_RECENT
+            value: "5"
+          - name: INTERVAL_RETRY
+            value: "60"
+          - name: INTERVAL_REPORT
+            value: "60"
+          ports:
+          - containerPort: 80
+          volumeMounts:
+          - mountPath: /data
+            name: pbftstats-data
+      dnsPolicy: ClusterFirst
+      nodeSelector:
+        beta.kubernetes.io/os: linux
+      restartPolicy: Always
+  updateStrategy:
+    type: OnDelete
+  volumeClaimTemplates:
+  - metadata:
+      creationTimestamp: null
+      name: pbftstats-data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+      storageClassName: gp2-extensible-us-east-2c
+      volumeMode: Filesystem

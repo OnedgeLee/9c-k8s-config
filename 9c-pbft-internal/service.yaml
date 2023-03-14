@@ -398,3 +398,18 @@ spec:
   type: LoadBalancer
 
 ---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: pbftstats
+spec:
+  ports:
+  - name: "http"
+    port: 80
+    targetPort: 80
+  selector:
+    app: pbftstats
+  type: LoadBalancer
+
+---
